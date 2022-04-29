@@ -6,61 +6,59 @@ using System.Threading.Tasks;
 
 namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Entidades
 {
-    public class ParametrosSistema : IParametrosSistema
+    public class ParametrosSistema 
     {
-        public Uri UrlEntrada { get; private set; }
-        public string PastaSaida { get; private set; }
+        public static Uri UrlEntrada { get; private set; }
+        public static string ArquivoSaida { get; private set; }        
 
-
-        public RetornoValidacoes ValidarParametrosSistema(string[] parametrosCLI)
-        {           
-
-            return retornoValidacoes;
-        }
-
-        private RetornoValidacoes ValidarUrlEntrada(string urlEntrada)
+        public ParametrosSistema(string urlEntrada, string arquivoSaida)
         {
-            RetornoValidacoes retornoValidacoes = new RetornoValidacoes(true, string.Empty);
+            ConverterStringEmUri(urlEntrada);
+            ArquivoSaida = arquivoSaida;
+        }       
+
+        public static Retorno ValidarUrlEntrada(string urlEntrada)
+        {
+            Retorno retornoValidacoes = new Retorno(true, string.Empty);
 
             if (string.IsNullOrEmpty(urlEntrada))
             {
-                return new RetornoValidacoes(false, "Não foi passado a URL de entrada para obter o log original");
+                return new Retorno(false, "Não foi passado a URL de entrada para obter o log original");
             }
 
-            Uri uri;
-            bool resultado = Uri.TryCreate(urlEntrada, UriKind.Absolute, out uri) && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
+            bool resultado = ConverterStringEmUri(urlEntrada);
 
             if (!resultado)
             {
-                return new RetornoValidacoes(false, "URL de entrada não foi passada no formato correto");
+                return new Retorno(false, "URL de entrada não foi passada no formato correto");
+            }            
+
+            return retornoValidacoes;
+        }
+
+        private static bool ConverterStringEmUri(string urlEntrada)
+        {
+            Uri uri;
+            bool resultado = Uri.TryCreate(urlEntrada, UriKind.Absolute, out uri) && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
+
+            if (resultado)
+            {
+                UrlEntrada = uri;
             }
 
-            
-
-            return retornoValidacoes;
+            return resultado;
         }
 
-        private RetornoValidacoes ValidarPastaSaida(string pastaSaida)
+        public static Retorno ValidarArquivoSaida(string arquivoSaida)
         {
-            RetornoValidacoes retornoValidacoes = new RetornoValidacoes(true, string.Empty);
+            Retorno retornoValidacoes = new Retorno(true, string.Empty);
 
-            //if (string.IsNullOrEmpty(urlEntrada))
-            //{
-            //    return new RetornoValidacoes(false, "Não foi passado a URL de entrada para obter o log original");
-            //}
-
-            //Uri uri;
-            //bool resultado = Uri.TryCreate(urlEntrada, UriKind.Absolute, out uri) && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
-
-            //if (!resultado)
-            //{
-            //    return new RetornoValidacoes(false, "URL de entrada não foi passada no formato correto");
-            //}
-
-
+            if (string.IsNullOrEmpty(arquivoSaida))
+            {
+                return new Retorno(false, "Não foi passado o arquivo de saída para gravar o log convertido");
+            }
 
             return retornoValidacoes;
         }
-
     }
 }

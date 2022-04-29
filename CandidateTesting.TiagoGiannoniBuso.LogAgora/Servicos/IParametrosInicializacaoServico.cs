@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Util
+namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
 {
     public interface IParametrosInicializacaoServico
     {
-        ParametrosSistema ObterParametrosInicializacaoSistema();
+        string[] ObterParametrosCommandLine();
+        Retorno ValidarParametrosCLI(string[] parametrosCLI);
     }
 }

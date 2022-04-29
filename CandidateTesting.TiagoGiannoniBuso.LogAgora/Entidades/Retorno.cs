@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Entidades
 {
-    public class RetornoValidacoes
+    public class Retorno
     {
         public bool Sucesso { get; private set; }
         public string Erro { get; private set; }
 
-        public RetornoValidacoes(bool sucesso, string erro)
+        public Retorno(bool sucesso, string erro)
         {
             Sucesso = sucesso;
             Erro = erro;  

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "CandidateTesting.TiagoGiannoniBuso.LogAgora": {
+      "commandName": "Project",
+      "commandLineArgs": "https://s3.amazonaws.com/uux-itaas-static/minha-cdn-logs/input-01.txt C:\\Output\\agora.txt"
+    }
+  }
+}
