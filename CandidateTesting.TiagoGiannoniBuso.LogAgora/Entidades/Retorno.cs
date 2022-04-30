@@ -9,13 +9,13 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Entidades
     public class Retorno
     {
         public bool Sucesso { get; private set; }
-        public string Erro { get; private set; }
+        public string Erro { get; private set; }        
 
         public Retorno(bool sucesso, string erro)
         {
             Sucesso = sucesso;
             Erro = erro;  
-        }
+        }       
 
         public Retorno InserirErro(string erro)
         {

@@ -25,11 +25,11 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
             }           
         }
 
-        public List<string> AjustarTextoAntesDeObterParametros(string texto)
+        public List<string> AjustarConteudoArquivoAntesDeObterParametrosMinhaCDN(string conteudoArquivo)
         {
-            texto = RetirarAspas(texto);
-            texto = RetirarEspacos(texto);
-            List<string> textoEmLinha = ConverterTextoEmlinhas(texto);
+            conteudoArquivo = RetirarAspas(conteudoArquivo);
+            conteudoArquivo = RetirarEspacos(conteudoArquivo);
+            List<string> textoEmLinha = ConverterTextoEmlinhas(conteudoArquivo);
             return textoEmLinha;
         }
 
@@ -47,16 +47,26 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
         {
             if (texto.IndexOf("\r\n") > 0)
             {
-                string[] linhas = texto.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
-                return linhas.ToList();
+                return ConverterTextoEmLinhasComCaracteresDePulalinha(texto);
             }
             else
             {
-                List<string> linhas = new List<string>();
-                linhas.Add(texto);
-                return linhas;
+                return ConverterTextoEmLinhaComApensUmaLinha(texto);
             }
 
+        }     
+
+        private static List<string> ConverterTextoEmLinhasComCaracteresDePulalinha(string texto)
+        {
+            string[] linhas = texto.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+            return linhas.ToList();
+        }
+
+        private static List<string> ConverterTextoEmLinhaComApensUmaLinha(string texto)
+        {
+            List<string> linhas = new List<string>();
+            linhas.Add(texto);
+            return linhas;
         }
     }
 }

@@ -30,24 +30,29 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Entidades
         public string StatusCache { get; private set; }
 
 
-        public MinhaCDN SetarParametros(string texto)
+        public MinhaCDN SetarParametros(string linhaArquivoMinhaCDN)
         {
-            string[] arrayParametros = RetirarPipesDeTextoERetornarColunas(texto);
+            string[] arrayParametros = RealizarSplitDeLinhaDeArquivoMinhaCDNPorPipe(linhaArquivoMinhaCDN);
 
+            ConfigurarParametros(arrayParametros);
+
+            return this;
+        }       
+
+        private string[] RealizarSplitDeLinhaDeArquivoMinhaCDNPorPipe(string linhaArquivoMinhaCDN)
+        {
+            var colunasArray = linhaArquivoMinhaCDN.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);            
+            return colunasArray;
+        }
+
+        private void ConfigurarParametros(string[] arrayParametros)
+        {
             TamanhoResponse = int.Parse(arrayParametros[ColunaTamanhoResponse]);
             CodigoStatus = int.Parse(arrayParametros[ColunaCodigoStatus]);
             StatusCache = arrayParametros[ColunaStatusCache];
             MetodoHttp = arrayParametros[ColunaMetodoHttp];
-            UriPath = arrayParametros[ColunaUriPath];          
-            TempoGasto = Convert.ToInt32(Math.Round(Convert.ToDouble(arrayParametros[ColunaTempoGasto].Replace(".",","))));
-
-            return this;
-        }
-
-        private string[] RetirarPipesDeTextoERetornarColunas(string texto)
-        {
-            var colunasArray = texto.Split(new string[] { "|" }, StringSplitOptions.RemoveEmptyEntries);            
-            return colunasArray;
+            UriPath = arrayParametros[ColunaUriPath];
+            TempoGasto = Convert.ToInt32(Math.Round(Convert.ToDouble(arrayParametros[ColunaTempoGasto].Replace(".", ","))));
         }
     }
 }

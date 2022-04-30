@@ -10,34 +10,53 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
     public class ConversaoLogServico : IConversaoLogServico
     {
         private readonly IArquivoServico _arquivoServico;
+        public string LogAgora;
 
         public ConversaoLogServico(IArquivoServico arquivoServico)
         {
             _arquivoServico = arquivoServico;
-        }        
+        }
 
-        public async Task<Retorno> RealizarConversaoDeLog(ParametrosSistema parametrosSistema)
+        public async Task<string> RealizarConversaoDeLog(ParametrosSistema parametrosSistema)
         {
-            Retorno retorno = new Retorno(true, string.Empty);
+            await ObterTextoArquivoEntrada(parametrosSistema);
+            return LogAgora;
+        }
 
-            string conteudoArquivo = await ObterTextoArquivoEntrada(parametrosSistema, retorno);
-
-            if (!retorno.Sucesso)
+        public async Task ObterTextoArquivoEntrada(ParametrosSistema parametrosSistema)
+        {
+            string conteudoArquivo = string.Empty;
+            conteudoArquivo = await _arquivoServico.ObterTextoArquivoEntrada(parametrosSistema);
+            if (string.IsNullOrEmpty(conteudoArquivo))
             {
-                return retorno;
+                throw new Exception("Não foi encontrado um conteúdo de arquivo");
             }
 
-            List<string> textoFormatado = _arquivoServico.AjustarTextoAntesDeObterParametros(conteudoArquivo);
+            FormatarTextoParaConverterEmMinhaCDN(conteudoArquivo);
+        }
 
+        public void FormatarTextoParaConverterEmMinhaCDN(string conteudoArquivo)
+        {
+            List<string> linhasConteudoArquivo = _arquivoServico.AjustarConteudoArquivoAntesDeObterParametrosMinhaCDN(conteudoArquivo);
+            MontarListaMinhaCDN(linhasConteudoArquivo);
+        }
+
+        public void MontarListaMinhaCDN(List<string> linhasConteudoArquivo)
+        {
             List<MinhaCDN> logsMinhaCDN = new List<MinhaCDN>();
 
-            foreach (var texto in textoFormatado)
+            foreach (var linha in linhasConteudoArquivo)
             {
                 MinhaCDN minhaCDN = new MinhaCDN();
-                minhaCDN.SetarParametros(texto);
+                minhaCDN.SetarParametros(linha);
                 logsMinhaCDN.Add(minhaCDN);
             }
 
+            ConverterListaMinhaCDNEmListaAgora(logsMinhaCDN);
+        }
+
+        public void ConverterListaMinhaCDNEmListaAgora(List<MinhaCDN> logsMinhaCDN)
+        {
             List<Agora> logsAgora = new List<Agora>();
 
             foreach (var logMinhaCDN in logsMinhaCDN)
@@ -47,38 +66,30 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
                 logsAgora.Add(agora);
             }
 
-            string textoRetorno = string.Empty;
-            int linha = 1;             
+            MontarTextoLogAgoraConvertido(logsAgora);
+        }
+
+        public void MontarTextoLogAgoraConvertido(List<Agora> logsAgora)
+        {
+            int linha = 1;
+            LogAgora = string.Empty;
 
             foreach (var logAgora in logsAgora)
             {
                 if (linha == 1)
                 {
-                    textoRetorno += $"{logAgora.Versao}\n";
-                    textoRetorno += $"{logAgora.Data}\n";
-                    textoRetorno += $"{logAgora.Fields}";                    
+                    MontarCabecalho(logAgora);
                 }
                 linha++;
-                textoRetorno = textoRetorno + $"\n\"{logAgora.ProvedorLog}\" {logAgora.MetodoHttp} {logAgora.CodigoStatus} {logAgora.UriPath} {logAgora.TempoGasto} {logAgora.TamanhoResponse} {logAgora.StatusCache}";
+                LogAgora += $"\n\"{logAgora.ProvedorLog}\" {logAgora.MetodoHttp} {logAgora.CodigoStatus} {logAgora.UriPath} {logAgora.TempoGasto} {logAgora.TamanhoResponse} {logAgora.StatusCache}";
             }
-
-            return retorno;
         }
 
-        private async Task<string> ObterTextoArquivoEntrada(ParametrosSistema parametrosSistema, Retorno retorno)
+        private void MontarCabecalho(Agora logAgora)
         {
-            string conteudoArquivo = string.Empty;
-
-            try
-            {
-                conteudoArquivo = await _arquivoServico.ObterTextoArquivoEntrada(parametrosSistema);
-            }
-            catch (Exception ex)
-            {
-                retorno = retorno.InserirErro(ex.Message);
-            }
-
-            return conteudoArquivo;
+            LogAgora += $"{logAgora.Versao}\n";
+            LogAgora += $"{logAgora.Data}\n";
+            LogAgora += $"{logAgora.Fields}";
         }
     }
 }

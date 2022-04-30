@@ -10,6 +10,6 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
     public interface IArquivoServico
     {
         Task<string> ObterTextoArquivoEntrada(ParametrosSistema parametrosSistema);
-        List<string> AjustarTextoAntesDeObterParametros(string texto);
+        List<string> AjustarConteudoArquivoAntesDeObterParametrosMinhaCDN(string texto);
     }
 }
