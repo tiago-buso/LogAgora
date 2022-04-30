@@ -41,14 +41,14 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora
                 Console.WriteLine("Inicializando a conversão de log utilizando os parâmetros mencionados");
                 string texto = await conversaoServico.RealizarConversaoDeLog(parametrosSistema);
 
-                if (retorno.Sucesso)
+                if (!string.IsNullOrEmpty(texto))
                 {
                     Console.WriteLine("Conversão realizada com sucesso");
                     Console.WriteLine(texto);
                 }
                 else
                 {
-                    Console.WriteLine(retorno.Erro);
+                    Console.WriteLine("Foi encontrado erros na conversão de log");
                 }
             }            
         }

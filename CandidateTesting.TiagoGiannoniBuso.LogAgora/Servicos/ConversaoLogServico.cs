@@ -9,8 +9,7 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
 {
     public class ConversaoLogServico : IConversaoLogServico
     {
-        private readonly IArquivoServico _arquivoServico;
-        public string LogAgora;
+        private readonly IArquivoServico _arquivoServico;   
 
         public ConversaoLogServico(IArquivoServico arquivoServico)
         {
@@ -19,11 +18,16 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
 
         public async Task<string> RealizarConversaoDeLog(ParametrosSistema parametrosSistema)
         {
-            await ObterTextoArquivoEntrada(parametrosSistema);
-            return LogAgora;
+            string conteudoArquivo = await ObterTextoArquivoEntrada(parametrosSistema);
+            List<string> linhasConteudoArquivo = FormatarTextoParaConverterEmMinhaCDN(conteudoArquivo);
+            List<MinhaCDN> logsMinhaCDN = MontarListaMinhaCDN(linhasConteudoArquivo);
+            List<Agora> logsAgora = ConverterListaMinhaCDNEmListaAgora(logsMinhaCDN);
+            string logFormatadoAgora = MontarTextoLogAgoraConvertido(logsAgora);
+
+            return logFormatadoAgora;
         }
 
-        public async Task ObterTextoArquivoEntrada(ParametrosSistema parametrosSistema)
+        public async Task<string> ObterTextoArquivoEntrada(ParametrosSistema parametrosSistema)
         {
             string conteudoArquivo = string.Empty;
             conteudoArquivo = await _arquivoServico.ObterTextoArquivoEntrada(parametrosSistema);
@@ -32,16 +36,15 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
                 throw new Exception("Não foi encontrado um conteúdo de arquivo");
             }
 
-            FormatarTextoParaConverterEmMinhaCDN(conteudoArquivo);
+            return conteudoArquivo;
         }
 
-        public void FormatarTextoParaConverterEmMinhaCDN(string conteudoArquivo)
+        public List<string> FormatarTextoParaConverterEmMinhaCDN(string conteudoArquivo)
         {
-            List<string> linhasConteudoArquivo = _arquivoServico.AjustarConteudoArquivoAntesDeObterParametrosMinhaCDN(conteudoArquivo);
-            MontarListaMinhaCDN(linhasConteudoArquivo);
+            return _arquivoServico.AjustarConteudoArquivoAntesDeObterParametrosMinhaCDN(conteudoArquivo);            
         }
 
-        public void MontarListaMinhaCDN(List<string> linhasConteudoArquivo)
+        public List<MinhaCDN> MontarListaMinhaCDN(List<string> linhasConteudoArquivo)
         {
             List<MinhaCDN> logsMinhaCDN = new List<MinhaCDN>();
 
@@ -52,10 +55,10 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
                 logsMinhaCDN.Add(minhaCDN);
             }
 
-            ConverterListaMinhaCDNEmListaAgora(logsMinhaCDN);
+           return logsMinhaCDN;
         }
 
-        public void ConverterListaMinhaCDNEmListaAgora(List<MinhaCDN> logsMinhaCDN)
+        public List<Agora> ConverterListaMinhaCDNEmListaAgora(List<MinhaCDN> logsMinhaCDN)
         {
             List<Agora> logsAgora = new List<Agora>();
 
@@ -66,30 +69,36 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
                 logsAgora.Add(agora);
             }
 
-            MontarTextoLogAgoraConvertido(logsAgora);
+            return logsAgora;
         }
 
-        public void MontarTextoLogAgoraConvertido(List<Agora> logsAgora)
+        public string MontarTextoLogAgoraConvertido(List<Agora> logsAgora)
         {
             int linha = 1;
-            LogAgora = string.Empty;
+            string logAgoraEmTexto = string.Empty;
 
             foreach (var logAgora in logsAgora)
             {
                 if (linha == 1)
                 {
-                    MontarCabecalho(logAgora);
+                    logAgoraEmTexto = MontarCabecalho(logAgora);
                 }
                 linha++;
-                LogAgora += $"\n\"{logAgora.ProvedorLog}\" {logAgora.MetodoHttp} {logAgora.CodigoStatus} {logAgora.UriPath} {logAgora.TempoGasto} {logAgora.TamanhoResponse} {logAgora.StatusCache}";
+                logAgoraEmTexto += $"\n\"{logAgora.ProvedorLog}\" {logAgora.MetodoHttp} {logAgora.CodigoStatus} {logAgora.UriPath} {logAgora.TempoGasto} {logAgora.TamanhoResponse} {logAgora.StatusCache}";
             }
+
+            return logAgoraEmTexto;
         }
 
-        private void MontarCabecalho(Agora logAgora)
+        private string MontarCabecalho(Agora logAgora)
         {
-            LogAgora += $"{logAgora.Versao}\n";
-            LogAgora += $"{logAgora.Data}\n";
-            LogAgora += $"{logAgora.Fields}";
+            string logAgoraEmTexto = string.Empty;
+
+            logAgoraEmTexto += $"{logAgora.Versao}\n";
+            logAgoraEmTexto += $"{logAgora.Data}\n";
+            logAgoraEmTexto += $"{logAgora.Fields}";
+
+            return logAgoraEmTexto;
         }
     }
 }
