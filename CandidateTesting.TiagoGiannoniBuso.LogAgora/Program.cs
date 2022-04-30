@@ -39,17 +39,8 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora
                 ParametrosSistema parametrosSistema = new ParametrosSistema(parametrosCLI[1], parametrosCLI[2]);
 
                 Console.WriteLine("Inicializando a conversão de log utilizando os parâmetros mencionados");
-                string texto = await conversaoServico.RealizarConversaoDeLog(parametrosSistema);
-
-                if (!string.IsNullOrEmpty(texto))
-                {
-                    Console.WriteLine("Conversão realizada com sucesso");
-                    Console.WriteLine(texto);
-                }
-                else
-                {
-                    Console.WriteLine("Foi encontrado erros na conversão de log");
-                }
+                await conversaoServico.RealizarConversaoDeLog(parametrosSistema);                
+                Console.WriteLine("Conversão realizada com sucesso");                
             }            
         }
 

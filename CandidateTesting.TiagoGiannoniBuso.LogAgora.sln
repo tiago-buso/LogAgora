@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CandidateTesting.TiagoGiannoniBuso.LogAgora", "CandidateTesting.TiagoGiannoniBuso.LogAgora\CandidateTesting.TiagoGiannoniBuso.LogAgora.csproj", "{CE9F338F-1864-4B70-A9B9-EE331DD4C7C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CandidateTesting.TiagoGiannoniBuso.LogAgora", "CandidateTesting.TiagoGiannoniBuso.LogAgora\CandidateTesting.TiagoGiannoniBuso.LogAgora.csproj", "{CE9F338F-1864-4B70-A9B9-EE331DD4C7C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AgoraTestProject", "AgoraTestProject\AgoraTestProject.csproj", "{6AED23E0-85CF-4A0B-AD84-28ADD03857A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{CE9F338F-1864-4B70-A9B9-EE331DD4C7C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE9F338F-1864-4B70-A9B9-EE331DD4C7C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE9F338F-1864-4B70-A9B9-EE331DD4C7C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AED23E0-85CF-4A0B-AD84-28ADD03857A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AED23E0-85CF-4A0B-AD84-28ADD03857A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AED23E0-85CF-4A0B-AD84-28ADD03857A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AED23E0-85CF-4A0B-AD84-28ADD03857A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

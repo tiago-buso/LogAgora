@@ -68,5 +68,26 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
             linhas.Add(texto);
             return linhas;
         }
+
+        public void SalvarArquivo(string conteudoArquivo, string caminhoDestino)
+        {
+            try
+            {
+                var pasta = Path.GetDirectoryName(caminhoDestino).ToString();
+                Directory.CreateDirectory(pasta);
+                           
+                byte[] fileBytes = new UTF8Encoding(true).GetBytes(conteudoArquivo);                
+
+                using (var fs = new FileStream(caminhoDestino, FileMode.Create, FileAccess.Write))
+                {
+                    fs.Write(fileBytes, 0, fileBytes.Length);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Foi encontrado um erro ao realizar a tentativa de salvar o arquivo de log convertido. " + ex.Message);
+            }
+            
+        }
     }
 }

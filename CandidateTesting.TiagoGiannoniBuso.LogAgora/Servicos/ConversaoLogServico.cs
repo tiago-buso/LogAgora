@@ -16,15 +16,15 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
             _arquivoServico = arquivoServico;
         }
 
-        public async Task<string> RealizarConversaoDeLog(ParametrosSistema parametrosSistema)
+        public async Task RealizarConversaoDeLog(ParametrosSistema parametrosSistema)
         {
             string conteudoArquivo = await ObterTextoArquivoEntrada(parametrosSistema);
             List<string> linhasConteudoArquivo = FormatarTextoParaConverterEmMinhaCDN(conteudoArquivo);
             List<MinhaCDN> logsMinhaCDN = MontarListaMinhaCDN(linhasConteudoArquivo);
             List<Agora> logsAgora = ConverterListaMinhaCDNEmListaAgora(logsMinhaCDN);
             string logFormatadoAgora = MontarTextoLogAgoraConvertido(logsAgora);
-
-            return logFormatadoAgora;
+            _arquivoServico.SalvarArquivo(logFormatadoAgora, parametrosSistema.ArquivoSaida);
+            
         }
 
         public async Task<string> ObterTextoArquivoEntrada(ParametrosSistema parametrosSistema)
