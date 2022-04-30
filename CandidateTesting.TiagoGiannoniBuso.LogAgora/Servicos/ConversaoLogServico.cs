@@ -38,6 +38,30 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
                 logsMinhaCDN.Add(minhaCDN);
             }
 
+            List<Agora> logsAgora = new List<Agora>();
+
+            foreach (var logMinhaCDN in logsMinhaCDN)
+            {
+                Agora agora = new Agora();
+                agora = agora.ConverterMinhaCDNEmAgora(logMinhaCDN);
+                logsAgora.Add(agora);
+            }
+
+            string textoRetorno = string.Empty;
+            int linha = 1;             
+
+            foreach (var logAgora in logsAgora)
+            {
+                if (linha == 1)
+                {
+                    textoRetorno += $"{logAgora.Versao}\n";
+                    textoRetorno += $"{logAgora.Data}\n";
+                    textoRetorno += $"{logAgora.Fields}";                    
+                }
+                linha++;
+                textoRetorno = textoRetorno + $"\n\"{logAgora.ProvedorLog}\" {logAgora.MetodoHttp} {logAgora.CodigoStatus} {logAgora.UriPath} {logAgora.TempoGasto} {logAgora.TamanhoResponse} {logAgora.StatusCache}";
+            }
+
             return retorno;
         }
 
@@ -47,7 +71,7 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
 
             try
             {
-                 await _arquivoServico.ObterTextoArquivoEntrada(parametrosSistema);
+                conteudoArquivo = await _arquivoServico.ObterTextoArquivoEntrada(parametrosSistema);
             }
             catch (Exception ex)
             {

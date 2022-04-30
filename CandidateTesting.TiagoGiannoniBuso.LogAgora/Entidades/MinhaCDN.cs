@@ -38,8 +38,8 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Entidades
             CodigoStatus = int.Parse(arrayParametros[ColunaCodigoStatus]);
             StatusCache = arrayParametros[ColunaStatusCache];
             MetodoHttp = arrayParametros[ColunaMetodoHttp];
-            UriPath = arrayParametros[ColunaUriPath];
-            TempoGasto = int.Parse(arrayParametros[ColunaTempoGasto]);
+            UriPath = arrayParametros[ColunaUriPath];          
+            TempoGasto = Convert.ToInt32(Math.Round(Convert.ToDouble(arrayParametros[ColunaTempoGasto].Replace(".",","))));
 
             return this;
         }

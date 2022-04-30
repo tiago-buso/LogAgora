@@ -22,11 +22,11 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Entidades
 
         public string StatusCache { get; private set; }
 
-        public string Versao => "#Version: 1.0\n";
+        public string Versao => "#Version: 1.0";
 
-        public string Data => $"#Date: {DateTime.Now.ToString("dd/MM/yyyy H:mm:ss")}\n";
+        public string Data => $"#Date: {DateTime.Now.ToString("dd/MM/yyyy H:mm:ss")}";
 
-        public string Fields => "#Fields: provider http-method status-code uri-path time-taken response-size cache-status\n";
+        public string Fields => "#Fields: provider http-method status-code uri-path time-taken response-size cache-status";
 
         public Agora ConverterMinhaCDNEmAgora(MinhaCDN cdn)
         {
