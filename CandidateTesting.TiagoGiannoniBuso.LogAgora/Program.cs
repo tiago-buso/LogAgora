@@ -7,7 +7,7 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora
     public class Program
     {       
 
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             var serviceCollection = new ServiceCollection();
             ConfigureServices(serviceCollection);
@@ -39,7 +39,7 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora
                 ParametrosSistema parametrosSistema = new ParametrosSistema(parametrosCLI[1], parametrosCLI[2]);
 
                 Console.WriteLine("Inicializando a conversão de log utilizando os parâmetros mencionados");
-                retorno = conversaoServico.RealizarConversaoDeLog(parametrosSistema);
+                retorno = await conversaoServico.RealizarConversaoDeLog(parametrosSistema);
 
                 if (retorno.Sucesso)
                 {
@@ -57,6 +57,7 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora
         {
             services.AddScoped<IParametrosInicializacaoServico, ParametrosInicializacaoServico>();
             services.AddScoped<IConversaoLogServico, ConversaoLogServico>();
+            services.AddScoped<IArquivoServico, ArquivoServico>();  
         }
     }
 }

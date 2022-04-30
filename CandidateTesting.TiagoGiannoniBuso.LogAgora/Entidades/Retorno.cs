@@ -16,5 +16,12 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Entidades
             Sucesso = sucesso;
             Erro = erro;  
         }
+
+        public Retorno InserirErro(string erro)
+        {
+            Sucesso = false;
+            Erro = erro;
+            return this;
+        }
     }
 }

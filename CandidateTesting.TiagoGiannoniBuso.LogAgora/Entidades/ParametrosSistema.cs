@@ -8,8 +8,8 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Entidades
 {
     public class ParametrosSistema 
     {
-        public static Uri UrlEntrada { get; private set; }
-        public static string ArquivoSaida { get; private set; }        
+        public Uri UrlEntrada { get; private set; }
+        public string ArquivoSaida { get; private set; }        
 
         public ParametrosSistema(string urlEntrada, string arquivoSaida)
         {
@@ -17,7 +17,7 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Entidades
             ArquivoSaida = arquivoSaida;
         }       
 
-        public static Retorno ValidarUrlEntrada(string urlEntrada)
+        public Retorno ValidarUrlEntrada(string urlEntrada)
         {
             Retorno retornoValidacoes = new Retorno(true, string.Empty);
 
@@ -36,7 +36,7 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Entidades
             return retornoValidacoes;
         }
 
-        private static bool ConverterStringEmUri(string urlEntrada)
+        private bool ConverterStringEmUri(string urlEntrada)
         {
             Uri uri;
             bool resultado = Uri.TryCreate(urlEntrada, UriKind.Absolute, out uri) && (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps);
@@ -49,7 +49,7 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Entidades
             return resultado;
         }
 
-        public static Retorno ValidarArquivoSaida(string arquivoSaida)
+        public Retorno ValidarArquivoSaida(string arquivoSaida)
         {
             Retorno retornoValidacoes = new Retorno(true, string.Empty);
 

@@ -4,6 +4,6 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
 {
     public interface IConversaoLogServico
     {
-        Retorno RealizarConversaoDeLog(ParametrosSistema parametrosSistema);
+        Task<Retorno> RealizarConversaoDeLog(ParametrosSistema parametrosSistema);
     }
 }

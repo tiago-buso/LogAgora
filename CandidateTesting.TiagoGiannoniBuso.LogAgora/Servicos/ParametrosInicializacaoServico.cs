@@ -16,12 +16,14 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
         
         public Retorno ValidarParametrosCLI(string[] parametrosCLI)
         {
+            ParametrosSistema parametrosSistema = new ParametrosSistema(string.Empty, string.Empty);
+
             //parâmetro[0] é sempre uma .dll
-            Retorno parametroValido = ParametrosSistema.ValidarUrlEntrada(parametrosCLI[1]);
+            Retorno parametroValido = parametrosSistema.ValidarUrlEntrada(parametrosCLI[1]);
 
             if (parametroValido.Sucesso)
             {
-                parametroValido = ParametrosSistema.ValidarArquivoSaida(parametrosCLI[2]);
+                parametroValido = parametrosSistema.ValidarArquivoSaida(parametrosCLI[2]);
             }
 
             return parametroValido;
