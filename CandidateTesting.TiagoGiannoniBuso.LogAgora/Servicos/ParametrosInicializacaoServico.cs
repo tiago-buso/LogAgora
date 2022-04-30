@@ -18,15 +18,36 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
         {
             ParametrosSistema parametrosSistema = new ParametrosSistema(string.Empty, string.Empty);
 
-            //parâmetro[0] é sempre uma .dll
-            Retorno parametroValido = parametrosSistema.ValidarUrlEntrada(parametrosCLI[1]);
+            Retorno parametroValido = ValidarSeTemPeloMenosTresParametrosCLI(parametrosCLI);
 
-            if (parametroValido.Sucesso)
+            if (!parametroValido.Sucesso)
             {
-                parametroValido = parametrosSistema.ValidarArquivoSaida(parametrosCLI[2]);
+                return parametroValido;
             }
 
+            //parâmetro[0] é sempre uma .dll
+            parametroValido = parametrosSistema.ValidarUrlEntrada(parametrosCLI[1]);
+
+            if (!parametroValido.Sucesso)
+            {
+                return parametroValido;
+            }
+
+            parametroValido = parametrosSistema.ValidarArquivoSaida(parametrosCLI[2]);
+
             return parametroValido;
+        }
+
+        private Retorno ValidarSeTemPeloMenosTresParametrosCLI(string[] parametrosCLI)
+        {
+            Retorno retorno = new Retorno(true, "");
+
+            if (parametrosCLI.Length < 3)
+            {
+                retorno.InserirErro("Foi passado ao executável menos parâmetros que o necessário: URL de entrada e Path de saída");
+            }
+
+            return retorno;
         }
     }
 }

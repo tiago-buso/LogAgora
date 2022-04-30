@@ -23,8 +23,7 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
             List<MinhaCDN> logsMinhaCDN = MontarListaMinhaCDN(linhasConteudoArquivo);
             List<Agora> logsAgora = ConverterListaMinhaCDNEmListaAgora(logsMinhaCDN);
             string logFormatadoAgora = MontarTextoLogAgoraConvertido(logsAgora);
-            _arquivoServico.SalvarArquivo(logFormatadoAgora, parametrosSistema.ArquivoSaida);
-            
+            _arquivoServico.SalvarArquivo(logFormatadoAgora, parametrosSistema.ArquivoSaida);            
         }
 
         public async Task<string> ObterTextoArquivoEntrada(ParametrosSistema parametrosSistema)

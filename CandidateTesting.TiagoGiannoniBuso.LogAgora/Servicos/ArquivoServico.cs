@@ -56,13 +56,13 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
 
         }     
 
-        private static List<string> ConverterTextoEmLinhasComCaracteresDePulalinha(string texto)
+        private List<string> ConverterTextoEmLinhasComCaracteresDePulalinha(string texto)
         {
             string[] linhas = texto.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
             return linhas.ToList();
         }
 
-        private static List<string> ConverterTextoEmLinhaComApensUmaLinha(string texto)
+        private List<string> ConverterTextoEmLinhaComApensUmaLinha(string texto)
         {
             List<string> linhas = new List<string>();
             linhas.Add(texto);
@@ -73,10 +73,9 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
         {
             try
             {
-                var pasta = Path.GetDirectoryName(caminhoDestino).ToString();
-                Directory.CreateDirectory(pasta);
-                           
-                byte[] fileBytes = new UTF8Encoding(true).GetBytes(conteudoArquivo);                
+                ValidarExistenciaPasta(caminhoDestino);
+
+                byte[] fileBytes = new UTF8Encoding(true).GetBytes(conteudoArquivo);
 
                 using (var fs = new FileStream(caminhoDestino, FileMode.Create, FileAccess.Write))
                 {
@@ -88,6 +87,12 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
                 throw new Exception("Foi encontrado um erro ao realizar a tentativa de salvar o arquivo de log convertido. " + ex.Message);
             }
             
+        }
+
+        private void ValidarExistenciaPasta(string caminhoDestino)
+        {
+            var pasta = Path.GetDirectoryName(caminhoDestino).ToString();
+            Directory.CreateDirectory(pasta);
         }
     }
 }
