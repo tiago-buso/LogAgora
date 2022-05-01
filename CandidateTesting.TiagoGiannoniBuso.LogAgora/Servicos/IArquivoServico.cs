@@ -14,5 +14,7 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
         void SalvarArquivo(string conteudoArquivo, string caminhoDestino);
         string ObterCaminhoPastaDestino(string caminhoDestino);
         void CriarPastaDestino(string caminhoPasta);
+        string ObterNomeArquivoSemExtensao(string caminhoDestino);
+        void ValidarNomeArquivo(string nomeArquivo);
     }
 }

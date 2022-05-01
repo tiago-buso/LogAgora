@@ -115,7 +115,7 @@ namespace AgoraTestProject
             pasta.Should().Be(pastaExpected, "Sistema tem que ser capaz de obter o path correto sem o nome do arquivo");
         }
 
-        [Fact(DisplayName = "Obter o caminho da pasta destino invpalido vazio")]
+        [Fact(DisplayName = "Obter o caminho da pasta destino inválido vazio")]
         [Trait("Arquivo Final", "Testes de arquivos finais")]
         public void ObterCaminhoPastaDestinoPathVazio()
         {
@@ -157,6 +157,77 @@ namespace AgoraTestProject
             // Assert
             acao.Should().Throw<Exception>().WithMessage("Não foi possível criar a pasta de destino*", "Exceção estoura devido caracteres inválidos para path, ou não existe o driver Z na máquina");
             Assert.False(Directory.Exists(pastaExpected)); // esta pasta não deve existir
+        }
+
+        [Theory(DisplayName = "Obter o caminho da pasta destino corretamente")]
+        [Trait("Arquivo Final", "Testes de arquivos finais")]
+        [InlineData(@"C:\Output\teste\outrapasta\agora.txt", @"agora")]
+        [InlineData(@"C:\Output\agora.txt", @"agora")]
+        [InlineData(@"E:\PastaTeste\teste2\teste3\teste4_subteste\agora.txt", @"agora")]
+        [InlineData(@"C:\agora.txt", @"agora")]
+        public void ObterNomeArquivoDestinoPathValido(string caminhoCompleto, string arquivoExpected)
+        {
+            //Arrange && Act
+            string nomeArquivo = _arquivoServico.ObterNomeArquivoSemExtensao(caminhoCompleto);
+
+            // Assert
+            nomeArquivo.Should().Be(arquivoExpected, "Sistema tem que ser capaz de obter o nome do arquivo correto sem a extensão");
+        }
+
+        [Fact(DisplayName = "Obter o caminho do arquivo destino vazio")]
+        [Trait("Arquivo Final", "Testes de arquivos finais")]
+        public void ObterCaminhoArquivoDestinoPathVazio()
+        {
+            // Arrange
+            string caminhoArquivo = string.Empty;
+
+            //Act
+            Action acao = () => _arquivoServico.ObterNomeArquivoSemExtensao(caminhoArquivo);
+
+            // Assert
+            acao.Should().NotThrow<Exception>("Não estoura exceção, mesmo com filename vazio");
+        }
+
+        [Fact(DisplayName = "Obter o caminho do arquivo destino com char inválido")]
+        [Trait("Arquivo Final", "Testes de arquivos finais")]
+        public void ObterCaminhoArquivoDestinoInvalido()
+        {
+            // Arrange
+            string caminhoArquivo = $"C:\\Output\\TestesUnitarios\\testeUnitario|||.txt";
+
+            //Act
+            Action acao = () => _arquivoServico.ObterNomeArquivoSemExtensao(caminhoArquivo);
+
+            // Assert
+            acao.Should().NotThrow<Exception>("Mesmo com caracter inválido não estoura exceção devido caracteres inválidos");
+        }
+
+        [Fact(DisplayName = "Verificar o nome do arquivo válido")]
+        [Trait("Arquivo Final", "Testes de arquivos finais")]
+        public void NomeArquivoValido()
+        {
+            // Arrange
+            string caminhoArquivo = $"testeUnitario";
+
+            //Act
+            Action acao = () => _arquivoServico.ValidarNomeArquivo(caminhoArquivo);
+
+            // Assert
+            acao.Should().NotThrow<Exception>("Nome válido não tem que estourar nenhuma exceção");
+        }
+
+        [Fact(DisplayName = "Verificar o nome do arquivo inválido")]
+        [Trait("Arquivo Final", "Testes de arquivos finais")]
+        public void NomeArquivoInvalido()
+        {
+            // Arrange
+            string caminhoArquivo = $"||testeUnitario";
+
+            //Act
+            Action acao = () => _arquivoServico.ValidarNomeArquivo(caminhoArquivo);
+
+            // Assert
+            acao.Should().Throw<Exception>().WithMessage("Erro ao realizar a validação do arquivo, foi encontrado o erro:*", "Nome inválido tem que estourar nenhuma exceção");
         }
 
         [Fact(DisplayName = "Salvar um arquivo novo com conteúdo e caminho válidos")]
