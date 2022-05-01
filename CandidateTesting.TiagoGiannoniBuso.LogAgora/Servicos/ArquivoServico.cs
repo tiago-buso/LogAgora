@@ -27,10 +27,19 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
 
         public List<string> AjustarConteudoArquivoAntesDeObterParametrosMinhaCDN(string conteudoArquivo)
         {
+            ValidarExistenciaConteudoArquivo(conteudoArquivo);
             conteudoArquivo = RetirarAspas(conteudoArquivo);
             conteudoArquivo = RetirarEspacos(conteudoArquivo);
             List<string> textoEmLinha = ConverterTextoEmlinhas(conteudoArquivo);
             return textoEmLinha;
+        }
+
+        public void ValidarExistenciaConteudoArquivo(string conteudoArquivo)
+        {
+            if (string.IsNullOrEmpty(conteudoArquivo))
+            {
+                throw new Exception("Não foi encontrado um conteúdo de arquivo");
+            }
         }
 
         private string RetirarAspas(string texto)
@@ -73,7 +82,8 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
         {
             try
             {
-                ValidarExistenciaPasta(caminhoDestino);
+                string pastaDestino = ObterCaminhoPastaDestino(caminhoDestino);
+                CriarPastaDestino(caminhoDestino);
 
                 byte[] fileBytes = new UTF8Encoding(true).GetBytes(conteudoArquivo);
 
@@ -89,10 +99,30 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
             
         }
 
-        private void ValidarExistenciaPasta(string caminhoDestino)
+        public string ObterCaminhoPastaDestino(string caminhoDestino)
         {
-            var pasta = Path.GetDirectoryName(caminhoDestino).ToString();
-            Directory.CreateDirectory(pasta);
+            try
+            {
+                return Path.GetDirectoryName(caminhoDestino).ToString();
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("Não foi possível verificar o caminho da pasta de destino " + ex.Message);
+            }
+            
+            
+        }
+
+        public void CriarPastaDestino(string caminhoPasta)
+        {
+            try
+            {
+                Directory.CreateDirectory(caminhoPasta);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Não foi possível criar a pasta de destino" + ex.Message);
+            }
         }
     }
 }

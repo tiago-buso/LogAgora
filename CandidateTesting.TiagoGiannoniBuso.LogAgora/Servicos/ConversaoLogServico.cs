@@ -18,8 +18,7 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
 
         public async Task RealizarConversaoDeLog(ParametrosSistema parametrosSistema)
         {
-            string conteudoArquivo = await ObterTextoArquivoEntrada(parametrosSistema);
-            ValidarExistenciaConteudoArquivo(conteudoArquivo);
+            string conteudoArquivo = await ObterTextoArquivoEntrada(parametrosSistema);            
             List<string> linhasConteudoArquivo = FormatarTextoParaConverterEmMinhaCDN(conteudoArquivo);
             ValidarExistenciaLinhasConteudoArquivo(linhasConteudoArquivo);
             List<MinhaCDN> logsMinhaCDN = MontarListaMinhaCDN(linhasConteudoArquivo);
@@ -31,15 +30,7 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
         public async Task<string> ObterTextoArquivoEntrada(ParametrosSistema parametrosSistema)
         {            
             return await _arquivoServico.ObterTextoArquivoEntrada(parametrosSistema);                      
-        }
-
-        public void ValidarExistenciaConteudoArquivo(string conteudoArquivo)
-        {
-            if (string.IsNullOrEmpty(conteudoArquivo))
-            {
-                throw new Exception("Não foi encontrado um conteúdo de arquivo");
-            }
-        }
+        }      
 
         public List<string> FormatarTextoParaConverterEmMinhaCDN(string conteudoArquivo)
         {         

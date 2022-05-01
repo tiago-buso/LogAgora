@@ -40,7 +40,7 @@ namespace AgoraTestProject
         }
 
         [Fact(DisplayName = "Obter o conteúdo do arquivo válido")]
-        [Trait("Arquivo", "Testes de arquivos")]
+        [Trait("Arquivo Inicial", "Testes de arquivos iniciais")]
         public async void ObterConteudoArquivo()
         {
             // Arrange
@@ -54,7 +54,7 @@ namespace AgoraTestProject
         }
 
         [Fact(DisplayName = "Ajustar conteúdo do arquivo com uma linha")]
-        [Trait("Arquivo", "Testes de arquivos")]
+        [Trait("Arquivo Inicial", "Testes de arquivos iniciais")]
         public void AjustarConteudoArquivoUmaLinhas()
         {
             // Arrange
@@ -70,7 +70,7 @@ namespace AgoraTestProject
         }
 
         [Fact(DisplayName = "Ajustar conteúdo do arquivo com várias linhas")]
-        [Trait("Arquivo", "Testes de arquivos")]
+        [Trait("Arquivo Inicial", "Testes de arquivos iniciais")]
         public void AjustarConteudoArquivoVariasLinhas()
         {
             // Arrange
@@ -83,6 +83,49 @@ namespace AgoraTestProject
             textoEmLinha.Should().HaveCountGreaterThan(1, "Como o conteúdo do arquivo externo só tem uma linha, o sistema deve retornar mais uma linha nessa lista");
             textoEmLinha.Should().NotContain(" ", "Sistema deve converter espaços em pipes");
             textoEmLinha.Should().NotContain("\"", "Sistema deve retirar todas as aspas");
+        }
+
+        [Fact(DisplayName = "Ajustar conteúdo do arquivo com nenhuma linha")]
+        [Trait("Arquivo Inicial", "Testes de arquivos iniciais")]
+        public void AjustarConteudoArquivoSemLinhas()
+        {
+            // Arrange
+            string conteudoArquivo = string.Empty;
+
+            //Act
+            Action acao = () => _arquivoServico.AjustarConteudoArquivoAntesDeObterParametrosMinhaCDN(conteudoArquivo);
+
+            // Assert
+            acao.Should().Throw<Exception>().WithMessage("Não foi encontrado um conteúdo de arquivo", "Como o conteúdo do arquivo é vazio, estora a exceção");
+        }
+
+        [Theory(DisplayName = "Obter o caminho da pasta destino corretamente")]
+        [Trait("Arquivo Final", "Testes de arquivos finais")]
+        [InlineData(@"C:\Output\teste\outrapasta\agora.txt", @"C:\Output\teste\outrapasta")]
+        [InlineData(@"C:\Output\agora.txt", @"C:\Output")]
+        [InlineData(@"E:\PastaTeste\teste2\teste3\teste4_subteste\agora.txt", @"E:\PastaTeste\teste2\teste3\teste4_subteste")]
+        [InlineData(@"C:\agora.txt", @"C:\")]        
+        public void ObterCaminhoPastaDestinoPathValido(string caminhoPasta, string pastaExpected)
+        {            
+            //Arrange && Act
+            string pasta = _arquivoServico.ObterCaminhoPastaDestino(caminhoPasta);
+
+            // Assert
+            pasta.Should().Be(pastaExpected, "Sistema tem que ser capaz de obter o path correto sem o nome do arquivo");
+        }
+
+        [Fact(DisplayName = "Obter o caminho da pasta destino invpalido vazio")]
+        [Trait("Arquivo Final", "Testes de arquivos finais")]
+        public void ObterCaminhoPastaDestinoPathVazio()
+        {
+            // Arrange
+            string caminhoPasta = string.Empty;
+
+            //Act
+            Action acao = () => _arquivoServico.ObterCaminhoPastaDestino(caminhoPasta);
+
+            // Assert
+            acao.Should().Throw<Exception>().WithMessage("Não foi possível verificar o caminho da pasta de destino*", "Exceção estoura devido caracteres inválidos para path");
         }
     }
 }

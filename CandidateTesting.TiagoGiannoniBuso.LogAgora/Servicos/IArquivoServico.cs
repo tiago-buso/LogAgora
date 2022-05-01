@@ -12,5 +12,7 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
         Task<string> ObterTextoArquivoEntrada(ParametrosSistema parametrosSistema);
         List<string> AjustarConteudoArquivoAntesDeObterParametrosMinhaCDN(string texto);
         void SalvarArquivo(string conteudoArquivo, string caminhoDestino);
+        string ObterCaminhoPastaDestino(string caminhoDestino);
+        void CriarPastaDestino(string caminhoPasta);
     }
 }
