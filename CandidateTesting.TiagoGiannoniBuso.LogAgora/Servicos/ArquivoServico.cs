@@ -81,9 +81,11 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
         public void SalvarArquivo(string conteudoArquivo, string caminhoDestino)
         {
             try
-            {
-                string pastaDestino = ObterCaminhoPastaDestino(caminhoDestino);
+            {                
+                string pastaDestino = ObterCaminhoPastaDestino(caminhoDestino);                
                 CriarPastaDestino(pastaDestino);
+                string nomeArquivoSemExtensao = ObterNomeArquivoSemExtensao(caminhoDestino);
+                ValidarNomeArquivo(nomeArquivoSemExtensao);
 
                 byte[] fileBytes = new UTF8Encoding(true).GetBytes(conteudoArquivo);
 
@@ -111,7 +113,7 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
             }
             
             
-        }
+        }        
 
         public void CriarPastaDestino(string caminhoPasta)
         {
@@ -123,6 +125,36 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
             {
                 throw new Exception("Não foi possível criar a pasta de destino" + ex.Message);
             }
+        }
+
+        public string ObterNomeArquivoSemExtensao(string caminhoDestino)
+        {
+            try
+            {
+                return Path.GetFileNameWithoutExtension(caminhoDestino).ToString();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Não foi possível verificar o nome do arquivo " + ex.Message);
+            }
+        }
+
+        public void ValidarNomeArquivo(string nomeArquivo)
+        {
+            try
+            {
+                int indexCharsInvalidosNomeArquivo = nomeArquivo.IndexOfAny(Path.GetInvalidFileNameChars());
+                if (indexCharsInvalidosNomeArquivo >= 0)
+                {
+                    throw new Exception();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao realizar a validação do arquivo, foi encontrado o erro: " + ex.Message);
+            }
+
+
         }
     }
 }

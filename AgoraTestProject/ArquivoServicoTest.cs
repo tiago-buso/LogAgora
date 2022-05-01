@@ -158,5 +158,39 @@ namespace AgoraTestProject
             acao.Should().Throw<Exception>().WithMessage("Não foi possível criar a pasta de destino*", "Exceção estoura devido caracteres inválidos para path, ou não existe o driver Z na máquina");
             Assert.False(Directory.Exists(pastaExpected)); // esta pasta não deve existir
         }
+
+        [Fact(DisplayName = "Salvar um arquivo novo com conteúdo e caminho válidos")]
+        [Trait("Arquivo Final", "Testes de arquivos finais")]
+        public void SalvarArquivoValido()
+        {
+            // Arrange
+            string dataAtual = DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ss");
+            string caminhoArquivo = $"C:\\Output\\TestesUnitarios\\testeUnitario{dataAtual}.txt";
+            string conteudoArquivo = $"Teste unitário feito em: {dataAtual}";
+
+            //Act
+            _arquivoServico.SalvarArquivo(conteudoArquivo, caminhoArquivo);
+
+            // Assert
+            Assert.True(File.Exists(caminhoArquivo));         
+        }
+
+        [Fact(DisplayName = "Salvar um arquivo novo com conteúdo válido, mas filename inválido")]
+        [Trait("Arquivo Final", "Testes de arquivos finais")]
+        public void SalvarArquivoInvalido()
+        {
+            // Arrange
+            string dataAtual = DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ss");
+            string caminhoArquivo = $"C:\\Output\\TestesUnitarios\\testeUnitario:{dataAtual}.txt";
+            string conteudoArquivo = $"Teste unitário feito em: {dataAtual}";
+
+            //Act
+            Action acao = () => _arquivoServico.SalvarArquivo(conteudoArquivo, caminhoArquivo);
+
+            // Assert
+            acao.Should().Throw<Exception>().WithMessage("Foi encontrado um erro ao realizar a tentativa de salvar o arquivo de log convertido.*", "Exceção estoura devido caracteres inválidos para path");
+            Assert.False(File.Exists(caminhoArquivo));
+        }
+
     }
 }
