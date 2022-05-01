@@ -19,7 +19,9 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
         public async Task RealizarConversaoDeLog(ParametrosSistema parametrosSistema)
         {
             string conteudoArquivo = await ObterTextoArquivoEntrada(parametrosSistema);
+            ValidarExistenciaConteudoArquivo(conteudoArquivo);
             List<string> linhasConteudoArquivo = FormatarTextoParaConverterEmMinhaCDN(conteudoArquivo);
+            ValidarExistenciaLinhasConteudoArquivo(linhasConteudoArquivo);
             List<MinhaCDN> logsMinhaCDN = MontarListaMinhaCDN(linhasConteudoArquivo);
             List<Agora> logsAgora = ConverterListaMinhaCDNEmListaAgora(logsMinhaCDN);
             string logFormatadoAgora = MontarTextoLogAgoraConvertido(logsAgora);
@@ -27,20 +29,29 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
         }
 
         public async Task<string> ObterTextoArquivoEntrada(ParametrosSistema parametrosSistema)
+        {            
+            return await _arquivoServico.ObterTextoArquivoEntrada(parametrosSistema);                      
+        }
+
+        public void ValidarExistenciaConteudoArquivo(string conteudoArquivo)
         {
-            string conteudoArquivo = string.Empty;
-            conteudoArquivo = await _arquivoServico.ObterTextoArquivoEntrada(parametrosSistema);
             if (string.IsNullOrEmpty(conteudoArquivo))
             {
                 throw new Exception("Não foi encontrado um conteúdo de arquivo");
             }
-
-            return conteudoArquivo;
         }
 
         public List<string> FormatarTextoParaConverterEmMinhaCDN(string conteudoArquivo)
         {         
             return _arquivoServico.AjustarConteudoArquivoAntesDeObterParametrosMinhaCDN(conteudoArquivo);            
+        }
+
+        public void ValidarExistenciaLinhasConteudoArquivo(List<string> linhasConteudoArquivo)
+        {
+            if (linhasConteudoArquivo == null || !linhasConteudoArquivo.Any())
+            {
+                throw new Exception("Não foi encontrado um conteúdo de arquivo válido que gere informações par ao log");
+            }
         }
 
         public List<MinhaCDN> MontarListaMinhaCDN(List<string> linhasConteudoArquivo)
