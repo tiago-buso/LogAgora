@@ -4,6 +4,7 @@ using FluentAssertions;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -126,6 +127,36 @@ namespace AgoraTestProject
 
             // Assert
             acao.Should().Throw<Exception>().WithMessage("Não foi possível verificar o caminho da pasta de destino*", "Exceção estoura devido caracteres inválidos para path");
+        }
+
+
+        [Theory(DisplayName = "Criar a pasta destino corretamente, ou simplesmente não fazer nada, se ela já existir")]
+        [Trait("Arquivo Final", "Testes de arquivos finais")]
+        [InlineData(@"C:\Output", @"C:\Output")]
+        [InlineData(@"C:\Output\teste", @"C:\Output\teste")]      
+        [InlineData(@"C:\PastaTeste\teste2", @"C:\PastaTeste\teste2")]       
+        public void CriarPastaDestino(string caminhoPasta, string pastaExpected)
+        {
+            //Arrange && Act
+            _arquivoServico.CriarPastaDestino(caminhoPasta);
+
+            // Assert
+            Assert.True(Directory.Exists(pastaExpected));
+        }
+
+        [Theory(DisplayName = "Criar a pasta destino com um path inválido")]
+        [Trait("Arquivo Final", "Testes de arquivos finais")]
+        [InlineData(@"Z:\Output", @"Z:\Output")]
+        [InlineData(@"Z:\Output\teste", @"Z:\Output\teste")]
+        [InlineData(@"C:\PástaComCaracterInválido:|", @"C:\PástaComCaracterInválido:|")]
+        public void ForcarErroAoCriarPastaDestino(string caminhoPasta, string pastaExpected)
+        {
+            //Arrange && Act
+            Action acao = () => _arquivoServico.CriarPastaDestino(caminhoPasta);
+
+            // Assert
+            acao.Should().Throw<Exception>().WithMessage("Não foi possível criar a pasta de destino*", "Exceção estoura devido caracteres inválidos para path, ou não existe o driver Z na máquina");
+            Assert.False(Directory.Exists(pastaExpected)); // esta pasta não deve existir
         }
     }
 }
