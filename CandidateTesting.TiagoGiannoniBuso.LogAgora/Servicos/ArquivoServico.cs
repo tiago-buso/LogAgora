@@ -83,7 +83,7 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
             try
             {
                 string pastaDestino = ObterCaminhoPastaDestino(caminhoDestino);
-                CriarPastaDestino(caminhoDestino);
+                CriarPastaDestino(pastaDestino);
 
                 byte[] fileBytes = new UTF8Encoding(true).GetBytes(conteudoArquivo);
 
