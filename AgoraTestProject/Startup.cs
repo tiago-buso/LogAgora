@@ -14,6 +14,7 @@ namespace AgoraTestProject
         {
             services.AddTransient<IParametrosInicializacaoServico, ParametrosInicializacaoServico>();
             services.AddTransient<IArquivoServico, ArquivoServico>();
+            services.AddTransient<IConversaoLogServico, ConversaoLogServico>();
         }
 }
 }
