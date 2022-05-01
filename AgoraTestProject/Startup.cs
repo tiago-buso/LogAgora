@@ -13,6 +13,7 @@ namespace AgoraTestProject
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IParametrosInicializacaoServico, ParametrosInicializacaoServico>();
+            services.AddTransient<IArquivoServico, ArquivoServico>();
         }
 }
 }

@@ -39,7 +39,7 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
         }
 
         public List<string> FormatarTextoParaConverterEmMinhaCDN(string conteudoArquivo)
-        {
+        {         
             return _arquivoServico.AjustarConteudoArquivoAntesDeObterParametrosMinhaCDN(conteudoArquivo);            
         }
 

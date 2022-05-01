@@ -47,7 +47,7 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
         {
             if (texto.IndexOf("\r\n") > 0)
             {
-                return ConverterTextoEmLinhasComCaracteresDePulalinha(texto);
+                return ConverterTextoEmLinhasComCaracteresDePulaLinha(texto);
             }
             else
             {
@@ -56,7 +56,7 @@ namespace CandidateTesting.TiagoGiannoniBuso.LogAgora.Servicos
 
         }     
 
-        private List<string> ConverterTextoEmLinhasComCaracteresDePulalinha(string texto)
+        private List<string> ConverterTextoEmLinhasComCaracteresDePulaLinha(string texto)
         {
             string[] linhas = texto.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
             return linhas.ToList();
